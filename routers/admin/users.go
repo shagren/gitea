@@ -217,6 +217,7 @@ func EditUserPost(ctx *context.Context, form auth.AdminEditUserForm) {
 	u.AllowImportLocal = form.AllowImportLocal
 	u.AllowCreateOrganization = form.AllowCreateOrganization
 	u.ProhibitLogin = form.ProhibitLogin
+	u.MaxTotalReposSizeLimit = form.MaxTotalReposSizeLimit
 
 	if err := models.UpdateUser(u); err != nil {
 		if models.IsErrEmailAlreadyUsed(err) {

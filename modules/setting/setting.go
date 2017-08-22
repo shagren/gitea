@@ -157,6 +157,7 @@ var (
 		AnsiCharset            string
 		ForcePrivate           bool
 		MaxCreationLimit       int
+		MaxTotalReposSizeLimit int
 		MirrorQueueLength      int
 		PullRequestQueueLength int
 		PreferredLicenses      []string
@@ -185,6 +186,7 @@ var (
 		AnsiCharset:            "",
 		ForcePrivate:           false,
 		MaxCreationLimit:       -1,
+		MaxTotalReposSizeLimit: -1,
 		MirrorQueueLength:      1000,
 		PullRequestQueueLength: 1000,
 		PreferredLicenses:      []string{"Apache License 2.0,MIT License"},
@@ -889,6 +891,7 @@ func NewContext() {
 	sec = Cfg.Section("repository")
 	Repository.DisableHTTPGit = sec.Key("DISABLE_HTTP_GIT").MustBool()
 	Repository.MaxCreationLimit = sec.Key("MAX_CREATION_LIMIT").MustInt(-1)
+	Repository.MaxTotalReposSizeLimit = sec.Key("MAX_TOTAL_REPOS_SIZE_LIMIT").MustInt(-1)
 	RepoRootPath = sec.Key("ROOT").MustString(path.Join(homeDir, "gitea-repositories"))
 	forcePathSeparator(RepoRootPath)
 	if !filepath.IsAbs(RepoRootPath) {
