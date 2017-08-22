@@ -135,7 +135,7 @@ type User struct {
 	DiffViewStyle string `xorm:"NOT NULL DEFAULT ''"`
 
 	// Maximum Total repos size limit, -1 means global default, 0 means unlimited
-	MaxTotalReposSizeLimit	int `xorm:"NOT NULL DEFAULT -1"`
+	MaxTotalReposSizeLimit	int64 `xorm:"NOT NULL DEFAULT -1"`
 }
 
 // BeforeInsert is invoked from XORM before inserting an object of this type.

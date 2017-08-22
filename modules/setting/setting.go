@@ -157,7 +157,7 @@ var (
 		AnsiCharset            string
 		ForcePrivate           bool
 		MaxCreationLimit       int
-		MaxTotalReposSizeLimit int
+		MaxTotalReposSizeLimit int64
 		MirrorQueueLength      int
 		PullRequestQueueLength int
 		PreferredLicenses      []string
