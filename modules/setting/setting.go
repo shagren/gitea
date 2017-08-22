@@ -891,7 +891,7 @@ func NewContext() {
 	sec = Cfg.Section("repository")
 	Repository.DisableHTTPGit = sec.Key("DISABLE_HTTP_GIT").MustBool()
 	Repository.MaxCreationLimit = sec.Key("MAX_CREATION_LIMIT").MustInt(-1)
-	Repository.MaxTotalReposSizeLimit = sec.Key("MAX_TOTAL_REPOS_SIZE_LIMIT").MustInt(-1)
+	Repository.MaxTotalReposSizeLimit = sec.Key("MAX_TOTAL_REPOS_SIZE_LIMIT").MustInt64(-1)
 	RepoRootPath = sec.Key("ROOT").MustString(path.Join(homeDir, "gitea-repositories"))
 	forcePathSeparator(RepoRootPath)
 	if !filepath.IsAbs(RepoRootPath) {
