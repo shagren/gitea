@@ -712,6 +712,7 @@ func CreateUser(u *User) (err error) {
 	u.EncodePasswd()
 	u.AllowCreateOrganization = setting.Service.DefaultAllowCreateOrganization
 	u.MaxRepoCreation = -1
+	u.MaxTotalReposSizeLimit = -1
 
 	sess := x.NewSession()
 	defer sess.Close()
@@ -1453,3 +1454,43 @@ func SyncExternalUsers() {
 		}
 	}
 }
+
+func (u *User) getReposTotalSize(e Engine) (int64, error){
+	var sizes []int64
+	var err error
+	sizes, err =  e.
+		Join("INNER", "repository", "repository.owner_id = user.id").
+		Where("user.id = ?", u.ID).
+		SumsInt(new (User), "repository.size")
+	if err != nil {
+		return -1, err
+	}
+	return sizes[0], err
+}
+
+// GetReposTotalSize calculate and returns total size of all repos in bytes
+func (u *User) GetReposTotalSize() (int64, error){
+	return u.getReposTotalSize(x)
+}
+
+// GetMaxReposTotalSizeLimit return effective limits in bytes
+func (u *User) GetMaxReposTotalSizeLimit() int64 {
+	if u.MaxTotalReposSizeLimit>=0 {
+		return u.MaxTotalReposSizeLimit * 1024 * 1024
+	}
+	if setting.Repository.MaxTotalReposSizeLimit > 0  {
+		return setting.Repository.MaxTotalReposSizeLimit
+	}
+	return 0
+}
+
+func (u *User) IsReposTotalSizeLimitReached() (bool, error){
+	var size int64
+	var err error
+	size, err = u.GetReposTotalSize()
+	if err != nil {
+		return true, err
+	}
+	return size >= u.GetMaxReposTotalSizeLimit(), nil
+}
+
