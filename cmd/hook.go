@@ -84,7 +84,7 @@ func runHookPreReceive(c *cli.Context) error {
 	// the environment setted on serv command
 	repoID, _ := strconv.ParseInt(os.Getenv(models.ProtectedBranchRepoID), 10, 64)
 	isWiki := (os.Getenv(models.EnvRepoIsWiki) == "true")
-	//username := os.Getenv(models.EnvRepoUsername)
+	username := os.Getenv(models.EnvRepoUsername)
 	//reponame := os.Getenv(models.EnvRepoName)
 	//repoPath := models.RepoPath(username, reponame)
 
@@ -123,7 +123,7 @@ func runHookPreReceive(c *cli.Context) error {
 		branchName := strings.TrimPrefix(refFullName, git.BranchPrefix)
 		protectBranch, err := private.GetProtectedBranchBy(repoID, branchName)
 		if err != nil {
-			log.GitLogger.Fatal(2, "retrieve protected branches information failed")
+			log.GitLogger.Fatal(2, "retrieve protected branches information failed: %v", err)
 		}
 
 		if protectBranch != nil {
@@ -137,6 +137,16 @@ func runHookPreReceive(c *cli.Context) error {
 				}
 			}
 		}
+
+		isMaxTotalReposSizeReached, err := private.GetIsMaxTotalReposSizeReached(username)
+		if err != nil {
+			log.GitLogger.Fatal(2, "retrieve repos size limit failed")
+		}
+		if (isMaxTotalReposSizeReached) {
+			fail(fmt.Sprintf("Maximum repositories size limit reached"), "")
+		}
+
+
 	}
 
 	return nil

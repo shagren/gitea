@@ -41,6 +41,7 @@ type AdminEditUserForm struct {
 	AllowImportLocal        bool
 	AllowCreateOrganization bool
 	ProhibitLogin           bool
+	MaxTotalReposSizeLimit	int64
 }
 
 // Validate validates form fields

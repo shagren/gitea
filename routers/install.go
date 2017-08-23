@@ -318,6 +318,7 @@ func InstallPost(ctx *context.Context, form auth.InstallForm) {
 		return
 	}
 	cfg.Section("security").Key("SECRET_KEY").SetValue(secretKey)
+	cfg.Section("repository").Key("MAX_TOTAL_REPOS_SIZE_LIMIT").SetValue("-1");
 
 	err = os.MkdirAll(filepath.Dir(setting.CustomConf), os.ModePerm)
 	if err != nil {

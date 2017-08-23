@@ -43,5 +43,7 @@ func RegisterRoutes(m *macaron.Macaron) {
 		m.Post("/ssh/:id/update", UpdatePublicKey)
 		m.Post("/push/update", PushUpdate)
 		m.Get("/branch/:id/*", GetProtectedBranchBy)
+		m.Get("/user/:username/is-total-repos-size-reached", GetIsMaxTotalReposSizeReached)
+
 	}, CheckInternalToken)
 }
